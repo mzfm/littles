@@ -1,0 +1,31 @@
+{
+  "name": "@mzfm/littles",
+  "version": "0.1.0",
+  "description": "Common little features missing in RPG Maker MZ.",
+  "main": "dist/bundle.js",
+  "scripts": {
+    "build": "build-plugin",
+    "dev": "npm run build -- --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mzfm/littles.git"
+  },
+  "keywords": [
+    "RPG Maker MZ"
+  ],
+  "author": "Vilja",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mzfm/littles/issues"
+  },
+  "homepage": "https://github.com/mzfm/littles#readme",
+  "devDependencies": {
+    "rmmz": "github:niokasgami/rpg-maker-mz-typescript",
+    "typescript": "^4.7.2"
+  },
+  "dependencies": {
+    "@mzfm/common": "github:mzfm/common"
+  }
+}
