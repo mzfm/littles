@@ -1,6 +1,9 @@
 import { $gameMessage, Game_Message } from "rmmz"
 
 import { MZFMCommand, PluginCommandDocs } from "@mzfm/common"
+import { $dataMap } from "rmmz"
+import { RPG } from "rmmz"
+import { overrideMethod } from "@mzfm/common"
 
 interface Choice {
   index: number
@@ -11,55 +14,70 @@ export interface EditChoicesArgs {
   choices: Choice[]
 }
 
-let _cached: Choice[] | null = null
-let _indices: number[] | null = null
-
 export const EditChoices: MZFMCommand<EditChoicesArgs> = {
   setGlobal: true,
   initialize: () => {
-    const Game_Message_setChoices = Game_Message.prototype.setChoices
-    Game_Message.prototype.setChoices = function (
-      choices,
-      defaultType,
-      cancelType
-    ) {
-      if (_cached) {
-        let indices = choices.map((_, i) => i)
-        for (const choice of _cached) {
-          const { index, value } = choice
-          if (index > choices.length) continue
-          if (value) {
-            choices[index - 1] = value
-          } else {
-            indices[index - 1] = -1
-          }
-        }
-        _indices = indices.filter((i) => i >= 0)
-        choices = _indices.map((i) => choices[i])
-        defaultType = _indices.indexOf(defaultType - 1) + 1
-        if (cancelType >= 0) {
-          cancelType = _indices.indexOf(cancelType)
-        }
-        _cached = null
-      }
-      Game_Message_setChoices.call(this, choices, defaultType, cancelType)
-    }
     const Game_Interpreter = (window as any).Game_Interpreter
-    const Game_Interpreter_setupChoices =
-      Game_Interpreter.prototype.setupChoices
-    Game_Interpreter.prototype.setupChoices = function (params: unknown[]) {
-      Game_Interpreter_setupChoices.call(this, params)
-      $gameMessage.setChoiceCallback((n: number) => {
-        this._branch[this._indent] = _indices ? _indices[n] : n
-        _indices = null
-      })
-    }
+
+    overrideMethod(
+      Game_Interpreter,
+      "setup",
+      function (this: any, original: any, list: unknown[], eventId: number) {
+        original.call(this, list, eventId)
+        this._editChoices = undefined
+      }
+    )
+    overrideMethod(
+      Game_Interpreter,
+      "setupChoices",
+      function (
+        this: any,
+        _: any,
+        params: [string[], number, number, number, number]
+      ) {
+        let choices = params[0]
+        let indices = choices.map((_, i) => i)
+        let cancelType = params[1] < choices.length ? params[1] : -2
+        let defaultType = params.length > 2 ? params[2] : 0
+        const positionType = params.length > 3 ? params[3] : 2
+        const background = params.length > 4 ? params[4] : 0
+        if (this._editChoices) {
+          for (const choice of this._editChoices) {
+            const { index, value } = choice
+            if (index > choices.length) continue
+            if (value) {
+              choices[index - 1] = value
+            } else {
+              indices[index - 1] = -1
+            }
+          }
+          indices = indices.filter((i) => i >= 0)
+          choices = indices.map((i) => choices[i])
+          defaultType = indices.indexOf(defaultType - 1) + 1
+          if (cancelType >= 0) {
+            cancelType = indices.indexOf(cancelType)
+          }
+          this._editChoices = undefined
+        }
+
+        $gameMessage.setChoices(choices, defaultType, cancelType)
+        $gameMessage.setChoiceBackground(background)
+        $gameMessage.setChoicePositionType(positionType)
+        $gameMessage.setChoiceCallback((n: number) => {
+          this._branch[this._indent] = indices[n]
+        })
+      }
+    )
     return true
   },
-  run: (args: EditChoicesArgs) => {
+  run: function (args: EditChoicesArgs) {
     const { choices } = args
     console.debug(`EditChoices:`, choices)
-    _cached = !choices || choices.length === 0 ? null : choices
+    if (!choices || choices.length === 0) {
+      this._editChoices = undefined
+    } else {
+      this._editChoices = choices
+    }
   },
 }
 
