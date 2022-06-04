@@ -52,7 +52,6 @@ export const EditChoices: MZFMCommand<EditChoicesArgs> = {
             }
           }
           indices = indices.filter((i) => i >= 0)
-          choices = indices.map((i) => choices[i])
           defaultType = indices.indexOf(defaultType - 1) + 1
           if (cancelType >= 0) {
             cancelType = indices.indexOf(cancelType)
@@ -60,6 +59,7 @@ export const EditChoices: MZFMCommand<EditChoicesArgs> = {
           this._editChoices = undefined
         }
 
+        choices = indices.map((i) => choices[i])
         $gameMessage.setChoices(choices, defaultType, cancelType)
         $gameMessage.setChoiceBackground(background)
         $gameMessage.setChoicePositionType(positionType)
@@ -70,7 +70,7 @@ export const EditChoices: MZFMCommand<EditChoicesArgs> = {
     )
     return true
   },
-  run: function (args: EditChoicesArgs) {
+  run: function (this: any, args: EditChoicesArgs) {
     const { choices } = args
     console.debug(`EditChoices:`, choices)
     if (!choices || choices.length === 0) {

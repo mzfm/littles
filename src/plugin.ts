@@ -1,5 +1,5 @@
 import { MZFMPlugin } from "@mzfm/common"
-import { EditChoices } from "./commands/edit-choices"
+import { EditChoices } from "./commands/EditChoices"
 
 const PARAMS = {}
 const COMMANDS = {
