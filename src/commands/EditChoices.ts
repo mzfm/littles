@@ -1,6 +1,6 @@
 import { $gameMessage, Game_Interpreter } from "rmmz"
 
-import { MZFMCommand, PluginCommandDocs, overrideMethod } from "@mzfm/common"
+import { MZFMCommand, PluginCommandDocs, overrideMethod, MZFMInterpreter, getContext } from "@mzfm/common"
 
 interface Choice {
   index: number
@@ -11,30 +11,28 @@ export interface EditChoicesArgs {
   choices: Choice[]
 }
 
-type EditChoicesInterpreter = Game_Interpreter & {
-  _editChoices?: Choice[]
-}
-
-export const EditChoices: MZFMCommand<EditChoicesArgs> = {
+export const EditChoices: MZFMCommand<EditChoicesArgs, EditChoicesArgs> = {
   setGlobal: true,
-  initialize: () => {
+  initialize: (commandName: string) => {
     overrideMethod(
       Game_Interpreter,
       "setup",
-      function (this: EditChoicesInterpreter, original, list, eventId) {
+      function (this: MZFMInterpreter, original, list, eventId) {
         original.call(this, list, eventId)
-        this._editChoices = undefined
+        const ctx = getContext<EditChoicesArgs>(this, commandName)
+        ctx.choices = undefined
       }
     )
-    overrideMethod(Game_Interpreter, "setupChoices", function (this: EditChoicesInterpreter, _, params) {
+    overrideMethod(Game_Interpreter, "setupChoices", function (this: MZFMInterpreter, _, params) {
       let choices = params[0].clone()
       let indices = choices.map((_, i) => i)
       let cancelType = params[1] < choices.length ? params[1] : -2
       let defaultType = params.length > 2 ? params[2] : 0
       const positionType = params.length > 3 ? params[3] : 2
       const background = params.length > 4 ? params[4] : 0
-      if (this._editChoices) {
-        for (const choice of this._editChoices) {
+      const ctx = getContext<EditChoicesArgs>(this, commandName)
+      if (ctx.choices) {
+        for (const choice of ctx.choices) {
           const { index, value } = choice
           if (index > choices.length) continue
           if (value) {
@@ -48,7 +46,7 @@ export const EditChoices: MZFMCommand<EditChoicesArgs> = {
         if (cancelType >= 0) {
           cancelType = indices.indexOf(cancelType)
         }
-        this._editChoices = undefined
+        ctx.choices = undefined
       }
 
       choices = indices.map((i) => choices[i])
@@ -61,13 +59,13 @@ export const EditChoices: MZFMCommand<EditChoicesArgs> = {
     })
     return true
   },
-  run: function (this: EditChoicesInterpreter, args: EditChoicesArgs) {
+  run: function (this: MZFMInterpreter, ctx, args) {
     const { choices } = args
     console.debug(`EditChoices:`, choices)
     if (!choices || choices.length === 0) {
-      this._editChoices = undefined
+      ctx.choices = undefined
     } else {
-      this._editChoices = choices
+      ctx.choices = choices
     }
   },
 }

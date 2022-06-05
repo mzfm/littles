@@ -1,7 +1,7 @@
 import { PluginDocs } from "@mzfm/common"
+import { DOCS as EditChoices } from "./commands/EditChoices"
 import { PLUGIN } from "./plugin"
 import packageConfig from "../package.json"
-import { DOCS as EditChoices } from "./commands/EditChoices"
 
 const { name: projectName, author, description, version } = packageConfig
 
