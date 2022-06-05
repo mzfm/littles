@@ -2,11 +2,12 @@
   "name": "@mzfm/littles",
   "version": "0.1.0",
   "description": "Common little features missing in RPG Maker MZ.",
-  "main": "dist/bundle.js",
+  "main": "dist/MZFM_Littles.js",
   "scripts": {
     "build": "build-plugin",
     "dev": "npm run build -- --watch",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "eslint --ext .js,.ts ./",
+    "prettier": "prettier --write ./src"
   },
   "repository": {
     "type": "git",
@@ -15,17 +16,23 @@
   "keywords": [
     "RPG Maker MZ"
   ],
-  "author": "Vilja",
+  "author": "Vilja <i@vilja.me>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/mzfm/littles/issues"
   },
   "homepage": "https://github.com/mzfm/littles#readme",
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.27.0",
+    "@typescript-eslint/parser": "^5.27.0",
+    "eslint": "^8.17.0",
+    "eslint-config-prettier": "^8.5.0",
+    "prettier": "^2.6.2",
     "rmmz": "github:niokasgami/rpg-maker-mz-typescript",
     "typescript": "^4.7.2"
   },
   "dependencies": {
     "@mzfm/common": "github:mzfm/common"
-  }
+  },
+  "private": true
 }
