@@ -57,7 +57,6 @@ export const EditChoices: MZFMCommand<EditChoicesArgs, EditChoicesArgs> = {
         this._branch[this._indent] = indices[n]
       })
     })
-    return true
   },
   run: function (this: MZFMInterpreter, ctx, args) {
     const { choices } = args
