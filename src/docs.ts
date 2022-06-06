@@ -1,5 +1,6 @@
 import { PluginDocs } from "@mzfm/common"
 import { DOCS as EditChoices } from "./commands/EditChoices"
+import { DOCS as Global } from "./commands/Global"
 import { PLUGIN } from "./plugin"
 import packageConfig from "../package.json"
 
@@ -24,6 +25,7 @@ export default {
   params: {},
   commands: {
     EditChoices,
+    Global,
   },
   helpText,
   copyright,

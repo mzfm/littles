@@ -13,13 +13,13 @@ export interface EditChoicesArgs {
 
 export const EditChoices: MZFMCommand<EditChoicesArgs, EditChoicesArgs> = {
   setGlobal: true,
-  initialize: (commandName: string) => {
+  initialize: (key: string) => {
     overrideMethod(
       Game_Interpreter,
       "setup",
       function (this: MZFMInterpreter, original, list, eventId) {
         original.call(this, list, eventId)
-        const ctx = getContext<EditChoicesArgs>(this, commandName)
+        const ctx = getContext<EditChoicesArgs>(this, key)
         ctx.choices = undefined
       }
     )
@@ -30,7 +30,7 @@ export const EditChoices: MZFMCommand<EditChoicesArgs, EditChoicesArgs> = {
       let defaultType = params.length > 2 ? params[2] : 0
       const positionType = params.length > 3 ? params[3] : 2
       const background = params.length > 4 ? params[4] : 0
-      const ctx = getContext<EditChoicesArgs>(this, commandName)
+      const ctx = getContext<EditChoicesArgs>(this, key)
       if (ctx.choices) {
         for (const choice of ctx.choices) {
           const { index, value } = choice
@@ -58,7 +58,7 @@ export const EditChoices: MZFMCommand<EditChoicesArgs, EditChoicesArgs> = {
       })
     })
   },
-  run: function (this: MZFMInterpreter, ctx, args) {
+  run: function (this: MZFMInterpreter, args, ctx) {
     const { choices } = args
     console.debug(`EditChoices:`, choices)
     if (!choices || choices.length === 0) {
