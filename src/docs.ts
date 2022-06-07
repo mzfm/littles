@@ -1,8 +1,10 @@
 import { PluginDocs } from "@mzfm/common"
 import { DOCS as EditChoices } from "./commands/EditChoices"
-import { DOCS as Global } from "./commands/Global"
+import { DOCS as GlobalVariable, DOCS_PARAMS as GlobalVariableParam } from "./commands/GlobalVariable"
+import { DOCS as RandomTitleImage } from "./features/RandomTitleImage"
 import { PLUGIN } from "./plugin"
 import packageConfig from "../package.json"
+import { makeParamDocs } from "./types"
 
 const { name: projectName, author, description, version } = packageConfig
 
@@ -22,10 +24,13 @@ export default {
   targets: ["MZ"],
   description,
   url: "https://github.com/mzfm/littles",
-  params: {},
+  params: {
+    ...makeParamDocs(GlobalVariableParam),
+    ...makeParamDocs(RandomTitleImage),
+  },
   commands: {
     EditChoices,
-    Global,
+    GlobalVariable,
   },
   helpText,
   copyright,

@@ -1,6 +1,13 @@
 import { MZFM, getGlobal, MZFMCommand, setGlobal, PluginCommandDocs, getGlobalSync } from "@mzfm/common"
+import { getParams, LittleFeatureDocs } from "../types"
 
-export interface GlobalArgs {
+const PARAMS_KEY = "GlobalVariable"
+
+export interface GlobalVariableParams {
+  namespace: string
+}
+
+export interface GlobalVariableArgs {
   key: string
   type: "string" | "number" | "boolean"
   s?: string
@@ -8,21 +15,36 @@ export interface GlobalArgs {
   b?: boolean
 }
 
-export const Global: MZFMCommand<GlobalArgs> = {
+export const GlobalVariable: MZFMCommand<GlobalVariableArgs> = {
   initialize: async () => {
-    MZFM.global = getGlobalSync
-    MZFM.setGlobal = getGlobal
+    const { namespace } = getParams(PARAMS_KEY)
+    MZFM.global = (key: string) => getGlobalSync(key, namespace)
+    MZFM.setGlobal = setGlobal
     // get a arbitrary variable to update the globals
-    await getGlobal("mzfm")
+    await getGlobal("mzfm", { namespace })
   },
-  run: (args) => {
+  run: async (args) => {
+    const { namespace } = getParams(PARAMS_KEY)
     const { key } = args
     const value = args.type === "string" ? args.s : args.type === "number" ? args.n : args.b
-    setGlobal(key, value)
+    await setGlobal(key, value, { namespace })
   },
 }
 
-export const DOCS: PluginCommandDocs<typeof Global> = {
+export const DOCS_PARAMS: LittleFeatureDocs<GlobalVariableParams> = {
+  key: PARAMS_KEY,
+  title: "",
+  params: {
+    namespace: {
+      text: "Namespace",
+      description: "The namespace of the global variables",
+      default: "mzfm_globals",
+      type: String,
+    },
+  },
+}
+
+export const DOCS: PluginCommandDocs<typeof GlobalVariable> = {
   description: "Set a global variable. Make sure type and value are consistent.",
   args: {
     key: {
