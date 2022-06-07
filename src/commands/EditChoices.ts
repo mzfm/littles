@@ -12,7 +12,6 @@ export interface EditChoicesArgs {
 }
 
 export const EditChoices: MZFMCommand<EditChoicesArgs, EditChoicesArgs> = {
-  setGlobal: true,
   initialize: (key: string) => {
     overrideMethod(
       Game_Interpreter,
