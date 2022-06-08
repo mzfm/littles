@@ -13,4 +13,4 @@ to build the plugin and a bundled script file can be found under `dist/`
 
 ## License
 
-[MIT](./LICENSE)
+[MIT](./LICENSE).
