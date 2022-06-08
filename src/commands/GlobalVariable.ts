@@ -18,7 +18,7 @@ export interface GlobalVariableArgs {
 export const GlobalVariable: MZFMCommand<GlobalVariableArgs> = {
   initialize: async () => {
     const { namespace } = getParams(PARAMS_KEY)
-    MZFM.global = (key: string) => getGlobalSync(key, namespace)
+    MZFM.global = (key: string) => MZFM._globalVariables[namespace] && MZFM._globalVariables[namespace][key]
     MZFM.setGlobal = setGlobal
     // get a arbitrary variable to update the globals
     await getGlobal("mzfm", { namespace })
