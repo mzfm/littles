@@ -1,4 +1,4 @@
-import { PluginDocsParameter } from "@mzfm/common"
+import { docsEnabled, PluginDocsParameter } from "@mzfm/common"
 import { FEATURES, PLUGIN } from "./plugin"
 
 export interface LittleParams {
@@ -44,15 +44,10 @@ export const makeParamDocs = <T>(
 ): Record<string, PluginDocsParameter<unknown>> => {
   const { key, title, description, params } = docs
   const result = {} as Record<string, PluginDocsParameter<unknown>>
-  const parentKey = title ? `:${key}:enabled` : undefined
-  if (parentKey) {
-    result[parentKey] = {
-      text: title,
-      description,
-      default: "Enabled",
-      type: "select",
-      options: ["Enabled", "Disabled"],
-    }
+  let parentKey: string | undefined
+  if (title) {
+    parentKey = `:${key}:enabled`
+    result[parentKey] = docsEnabled(title, description)
   }
   for (const key2 in params) {
     const paramKey = `:${key}:${key2}`

@@ -16,7 +16,7 @@ export const EditChoices: MZFMCommand<EditChoicesArgs, EditChoicesArgs> = {
     overrideMethod(
       Game_Interpreter,
       "setup",
-      function (this: MZFMInterpreter, original, list, eventId) {
+      function (this, original, list, eventId) {
         original.call(this, list, eventId)
         const ctx = getContext<EditChoicesArgs>(this, key)
         ctx.choices = undefined

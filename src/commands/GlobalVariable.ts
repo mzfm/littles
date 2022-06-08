@@ -1,4 +1,4 @@
-import { MZFM, getGlobal, MZFMCommand, setGlobal, PluginCommandDocs, getGlobalSync } from "@mzfm/common"
+import { docs, MZFM, getGlobal, MZFMCommand, setGlobal, PluginCommandDocs, getGlobalSync } from "@mzfm/common"
 import { getParams, LittleFeatureDocs } from "../types"
 
 const PARAMS_KEY = "GlobalVariable"
@@ -47,12 +47,7 @@ export const DOCS_PARAMS: LittleFeatureDocs<GlobalVariableParams> = {
 export const DOCS: PluginCommandDocs<typeof GlobalVariable> = {
   description: "Set a global variable. Make sure type and value are consistent.",
   args: {
-    key: {
-      text: "Key",
-      description: "The key of the global variable.",
-      required: true,
-      type: String,
-    },
+    key: { ...docs("Key", "The key of the global variable."), required: true },
     type: {
       text: "Type",
       description: "The type of the global variable.",
@@ -65,12 +60,7 @@ export const DOCS: PluginCommandDocs<typeof GlobalVariable> = {
       ],
       type: "select",
     },
-    s: {
-      text: "String value",
-      description: "A string to be set as the value",
-      default: "",
-      type: String,
-    },
+    s: docs("String value", "A string to be set as the value"),
     n: {
       text: "Number value",
       description: "A number to be set as the value",

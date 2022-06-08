@@ -1,5 +1,5 @@
 import { ImageManager, Scene_Title, Sprite } from "rmmz"
-import { globalEval, overrideMethod } from "@mzfm/common"
+import { docs, globalEval, overrideMethod } from "@mzfm/common"
 import { LittleFeature, LittleFeatureDocs, LittleParams } from "../types"
 
 const PARAMS_KEY = "RandomTitleImage"
@@ -18,8 +18,8 @@ export interface RandomTitleImageParams extends LittleParams {
 export const RandomTitleImage: LittleFeature<RandomTitleImageParams> = {
   start: (params: RandomTitleImageParams) => {
     const { files } = params
-    overrideMethod(Scene_Title, "create", function (this: Scene_Title, original) {
-      original()
+    overrideMethod(Scene_Title, "create", function (this, f) {
+      f()
       const filtered = files
         .map((file) => {
           const { condition } = file
@@ -59,14 +59,12 @@ export const DOCS: LittleFeatureDocs<RandomTitleImageParams> = {
               type: "file",
               dir: "img/",
             },
-            condition: {
-              text: "Condition",
-              description:
-                "Condition when the file is included. " +
+            condition: docs(
+              "Condition",
+              "Condition when the file is included. " +
                 "Leave blank to always include it. " +
-                "Please keep the condition as clean as possible.",
-              type: String,
-            },
+                "Please keep the condition as clean as possible."
+            ),
             offsetX: {
               text: "Offset X",
               description: "The x offset of the image.",
