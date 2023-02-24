@@ -1,4 +1,4 @@
-import { $gameMessage, Game_Interpreter } from "rmmz"
+import { $gameMessage, Game_Interpreter, TextWindowBackgroundType, TextWindowPositionType } from "rmmz"
 
 import { MZFMCommand, PluginCommandDocs, overrideMethod, MZFMInterpreter, getContext } from "@mzfm/common"
 
@@ -27,8 +27,8 @@ export const EditChoices: MZFMCommand<EditChoicesArgs, EditChoicesArgs> = {
       let indices = choices.map((_, i) => i)
       let cancelType = params[1] < choices.length ? params[1] : -2
       let defaultType = params.length > 2 ? params[2] : 0
-      const positionType = params.length > 3 ? params[3] : 2
-      const background = params.length > 4 ? params[4] : 0
+      const positionType = (params.length > 3 ? params[3] : 2) as TextWindowPositionType
+      const background = (params.length > 4 ? params[4] : 0) as TextWindowBackgroundType
       const ctx = getContext<EditChoicesArgs>(this, key)
       if (ctx.choices) {
         for (const choice of ctx.choices) {

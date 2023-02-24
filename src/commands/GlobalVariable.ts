@@ -1,4 +1,4 @@
-import { docs, MZFM, getGlobal, MZFMCommand, setGlobal, PluginCommandDocs, getGlobalSync } from "@mzfm/common"
+import { docs, MZFM, getGlobal, MZFMCommand, setGlobal, PluginCommandDocs } from "@mzfm/common"
 import { getParams, LittleFeatureDocs } from "../types"
 
 const PARAMS_KEY = "GlobalVariable"

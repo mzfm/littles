@@ -28,11 +28,11 @@
     "eslint": "^8.34.0",
     "eslint-config-prettier": "^8.6.0",
     "prettier": "^2.8.4",
-    "rmmz": "github:niokasgami/rpg-maker-mz-typescript",
     "typescript": "^4.9.5"
   },
   "dependencies": {
-    "@mzfm/common": "github:mzfm/common"
+    "@mzfm/common": "github:mzfm/common",
+    "rmmz": "npm:rmmz-types@^1.5.0-3"
   },
   "private": true
 }

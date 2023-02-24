@@ -21,6 +21,7 @@ const initialize = async () => {
     const feature = FEATURES[key]
     if ("start" in feature) {
       const params = getParams(key)
+      if (!params.enabled) continue
       await feature.start(params)
     }
   }
