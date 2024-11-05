@@ -28,11 +28,11 @@
     "eslint": "^8.34.0",
     "eslint-config-prettier": "^8.6.0",
     "prettier": "^2.8.4",
+    "rmmz": "npm:rmmz-types@^1.5.0-3",
     "typescript": "^4.9.5"
   },
   "dependencies": {
-    "@mzfm/common": "github:mzfm/common",
-    "rmmz": "npm:rmmz-types@^1.5.0-3"
+    "@mzfm/common": "github:mzfm/common"
   },
   "private": true
 }
